@@ -1,71 +1,44 @@
 import axios from "axios";
 
 const API = axios.create({
-  baseURL: "http://localhost:5000/api", // change when deployed
+  baseURL: "http://localhost:5000/api",
+  headers: { "Content-Type": "application/json" },
 });
 
-// ✅ Register User
+// ✅ Auth
 export const registerUser = async (userData) => {
-  try {
-    console.log("Register Request:", userData);
-    const res = await API.post("/auth/register", userData, {
-      headers: { "Content-Type": "application/json" },
-    });
-    return res.data;
-  } catch (error) {
-    console.error("Register Error:", error.response?.data || error.message);
-    throw error;
-  }
+  const res = await API.post("/auth/register", userData);
+  return res.data;
 };
 
-// ✅ Login User
 export const loginUser = async (userData) => {
-  try {
-    const res = await API.post("/auth/login", userData, {
-      headers: { "Content-Type": "application/json" },
-    });
-    return res.data;
-  } catch (error) {
-    console.error("Login Error:", error.response?.data || error.message);
-    throw error;
-  }
+  const res = await API.post("/auth/login", userData);
+  return res.data;
 };
 
 // ✅ Courses
-const BASE_URL = "http://localhost:5000/api";
-
 export const fetchCourses = async () => {
-  const res = await fetch(`${BASE_URL}/courses`);
-  return res.json();
+  const res = await API.get("/courses");
+  return res.data;
 };
 
 export const addCourseAPI = async (courseTitle) => {
-  const res = await fetch(`${BASE_URL}/courses/add`, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ title: courseTitle }),
-  });
-  return res.json();
+  const res = await API.post("/courses/add", { title: courseTitle });
+  return res.data;
 };
 
 export const deleteCourseAPI = async (courseId) => {
-  const res = await fetch(`${BASE_URL}/courses/${courseId}`, {
-    method: "DELETE",
-  });
-  return res.json();
+  const res = await API.delete(`/courses/${courseId}`);
+  return res.data;
 };
 
 // ✅ Students
-export const enrollCourse = async (studentId, courseId) => {
-  const res = await fetch(`${BASE_URL}/students/${studentId}/enroll`, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ courseId }),
-  });
-  return res.json();
+export const getStudents = async () => {
+  const res = await API.get("/students");
+  return res.data;
 };
 
-export const getStudents = async () => {
-  const res = await fetch(`${BASE_URL}/students`);
-  return res.json();
+export const enrollCourse = async (studentId, courseId) => {
+  const res = await API.post(`/students/${studentId}/enroll`, { courseId });
+  return res.data;
 };
