@@ -1,8 +1,10 @@
 import axios from "axios";
 
-// ✅ Use environment variable for flexible deployment
+// ✅ Base URL setup: uses VITE_API_URL if defined, otherwise defaults to localhost
+const BASE_URL = import.meta.env.VITE_API_URL || "http://localhost:5000/api";
+
 const API = axios.create({
-  baseURL: import.meta.env.VITE_API_URL || "http://localhost:5000/api",
+  baseURL: BASE_URL,
   headers: { "Content-Type": "application/json" },
 });
 
